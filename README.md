@@ -1,7 +1,7 @@
 # go-github-mock
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/UnstoppableMango/go-github-mock.svg)](https://pkg.go.dev/github.com/UnstoppableMango/go-github-mock)
-[![Go Report Card](https://goreportcard.com/badge/github.com/UnstoppableMango/go-github-mock)](https://goreportcard.com/report/github.com/UnstoppableMango/go-github-mock)
+[![Go Reference](https://pkg.go.dev/badge/github.com/unstoppablemango/go-github-mock.svg)](https://pkg.go.dev/github.com/unstoppablemango/go-github-mock)
+[![Go Report Card](https://goreportcard.com/badge/github.com/unstoppablemango/go-github-mock)](https://goreportcard.com/report/github.com/unstoppablemango/go-github-mock)
 
 > **Note:** This is a fork of [migueleliasweb/go-github-mock](https://github.com/migueleliasweb/go-github-mock), originally created by [Miguel Elias](https://github.com/migueleliasweb).
 > All credit for the original design and implementation goes to them.
