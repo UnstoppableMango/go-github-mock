@@ -13,7 +13,7 @@ import (
 	"github.com/buger/jsonparser"
 	"github.com/google/go-github/v73/github"
 
-	"github.com/migueleliasweb/go-github-mock/src/gen"
+	"github.com/unstoppablemango/go-github-mock/src/gen"
 	"golang.org/x/mod/modfile"
 )
 

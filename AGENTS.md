@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -27,7 +27,7 @@ gomod2nix generate
 
 ## Architecture
 
-This is a Go library (`github.com/migueleliasweb/go-github-mock`) for mocking GitHub API calls in unit tests. Users import it to create a mocked `*http.Client` that can be passed to `github.NewClient()`.
+This is a Go library (`github.com/unstoppablemango/go-github-mock`) for mocking GitHub API calls in unit tests. Users import it to create a mocked `*http.Client` that can be passed to `github.NewClient()`.
 
 ### Code Generation
 

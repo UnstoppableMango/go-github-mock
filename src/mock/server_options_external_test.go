@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/google/go-github/v73/github"
-	"github.com/migueleliasweb/go-github-mock/src/mock"
+	"github.com/unstoppablemango/go-github-mock/src/mock"
 )
 
 func TestWithRateLimit(t *testing.T) {

@@ -1,12 +1,14 @@
 # go-github-mock
-[![Go Reference](https://pkg.go.dev/badge/github.com/migueleliasweb/go-github-mock.svg)](https://pkg.go.dev/github.com/migueleliasweb/go-github-mock) [![Go Report Card](https://goreportcard.com/badge/github.com/migueleliasweb/go-github-mock)](https://goreportcard.com/report/github.com/migueleliasweb/go-github-mock)
+[![Go Reference](https://pkg.go.dev/badge/github.com/UnstoppableMango/go-github-mock.svg)](https://pkg.go.dev/github.com/UnstoppableMango/go-github-mock) [![Go Report Card](https://goreportcard.com/badge/github.com/UnstoppableMango/go-github-mock)](https://goreportcard.com/report/github.com/UnstoppableMango/go-github-mock)
+
+> **Note:** This is a fork of [migueleliasweb/go-github-mock](https://github.com/migueleliasweb/go-github-mock).
 
 A library to aid unittesting code that uses Golang's Github SDK
 
 ## Installation
 
 ```bash
-go get github.com/migueleliasweb/go-github-mock
+go get github.com/unstoppablemango/go-github-mock
 ```
 
 ## Features
@@ -21,7 +23,7 @@ go get github.com/migueleliasweb/go-github-mock
 ## Examples
 
 ```go
-import "github.com/migueleliasweb/go-github-mock/src/mock"
+import "github.com/unstoppablemango/go-github-mock/src/mock"
 ```
 
 ### Multiple requests

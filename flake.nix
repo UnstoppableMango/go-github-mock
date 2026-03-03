@@ -29,8 +29,8 @@
         let
           inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication gomod2nix;
 
-	  go-github-mock = buildGoApplication {
-            pname = "go-github-mock";
+	  generate = buildGoApplication {
+            pname = "generate";
 	    version = "0.0.1";
 	    src = lib.cleanSource ./.;
 	    modules = ./gomod2nix.toml;
@@ -38,14 +38,27 @@
         in
         {
 	  packages = {
-            inherit go-github-mock;
-	    default = go-github-mock;
+            inherit generate;
+	    default = generate;
+	  };
+
+	  apps = {
+            default = {
+              type = "app";
+	      program = "${generate}/bin/generate";
+	    };
+
+	    gomod2nix = {
+              type = "app";
+	      program = "${gomod2nix}/bin/gomod2nix";
+	    };
 	  };
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               gnumake
               go
+	      golangci-lint
 	      gomod2nix
               nixfmt
             ];

@@ -1,4 +1,4 @@
-module github.com/migueleliasweb/go-github-mock
+module github.com/unstoppablemango/go-github-mock
 
 go 1.24.4
 
