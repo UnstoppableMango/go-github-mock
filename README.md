@@ -62,14 +62,14 @@ mockedHTTPClient := mock.NewMockedHTTPClient(
         },
     ),
     mock.WithRequestMatchHandler(
-        mock.GetOrgsProjectsByOrg,
+        mock.GetOrgsReposByOrg,
         http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-            w.Write(mock.MustMarshal([]github.Project{
+            w.Write(mock.MustMarshal([]github.Repository{
                 {
-                    Name: github.Ptr("mocked-proj-1"),
+                    Name: github.Ptr("mocked-repo-1"),
                 },
                 {
-                    Name: github.Ptr("mocked-proj-2"),
+                    Name: github.Ptr("mocked-repo-2"),
                 },
             }))
         }),
@@ -91,14 +91,14 @@ orgs, _, orgsErr := c.Organizations.List(
 
 // orgs[0].Name == "foobar123thisorgwasmocked"
 
-projs, _, projsErr := c.Organizations.ListProjects(
+repos, _, reposErr := c.Repositories.ListByOrg(
     ctx,
     *orgs[0].Name,
-    &github.ProjectListOptions{},
+    nil,
 )
 
-// projs[0].Name == "mocked-proj-1"
-// projs[1].Name == "mocked-proj-2"
+// repos[0].Name == "mocked-repo-1"
+// repos[1].Name == "mocked-repo-2"
 
 ```
 

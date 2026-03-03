@@ -28,6 +28,13 @@ const OUTPUT_FILEPATH = "src/mock/endpointpattern.go"
 // requires a "Caser"
 var Title = cases.Title(language.English)
 
+var (
+	// paramRe matches path parameter placeholders like {owner}, {enterprise-team}
+	paramRe = regexp.MustCompile(`\{[^}]+\}`)
+	// tokenRe matches valid Go identifier characters and path separators
+	tokenRe = regexp.MustCompile(`[a-zA-Z0-9\/\{\}\_]+`)
+)
+
 type ScrapeResult struct {
 	HTTPMethod      string
 	EndpointPattern string
@@ -72,7 +79,6 @@ func FormatToGolangVarName(sr ScrapeResult) string {
 
 	// Replace hyphens inside path params with underscores to preserve them as single tokens
 	// e.g. {enterprise-team} -> {enterprise_team}, preventing {enterprise/team} split
-	paramRe := regexp.MustCompile(`\{[^}]+\}`)
 	pattern := paramRe.ReplaceAllStringFunc(sr.EndpointPattern, func(m string) string {
 		return strings.ReplaceAll(m, "-", "_")
 	})
@@ -82,8 +88,7 @@ func FormatToGolangVarName(sr ScrapeResult) string {
 
 	// cleans up varname when pattern was mutated
 	// e.g see `GetReposContentsByOwnerByRepoByPath`
-	re := regexp.MustCompile(`[a-zA-Z0-9\/\{\}\_]+`)
-	matches := re.FindAllString(pattern, -1)
+	matches := tokenRe.FindAllString(pattern, -1)
 	pattern = strings.Join(matches, "")
 
 	epSplit := strings.Split(
