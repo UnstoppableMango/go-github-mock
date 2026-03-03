@@ -58,6 +58,14 @@ func TestFormatToGolangVarName(t *testing.T) {
 			},
 			want: "GetReposActionsRunsPendingDeploymentsByOwnerByRepoByRunId",
 		},
+		{
+			name: "withHyphenInPathParam",
+			sr: ScrapeResult{
+				EndpointPattern: "/enterprises/{enterprise}/teams/{enterprise-team}/memberships",
+				HTTPMethod:      "GET",
+			},
+			want: "GetEnterprisesTeamsMembershipsByEnterpriseByEnterpriseTeam",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

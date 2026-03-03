@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/buger/jsonparser"
-	"github.com/google/go-github/v73/github"
+	"github.com/google/go-github/v84/github"
 
 	"github.com/unstoppablemango/go-github-mock/src/gen"
 	"golang.org/x/mod/modfile"
