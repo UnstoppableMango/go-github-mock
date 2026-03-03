@@ -35,10 +35,18 @@
 	    src = lib.cleanSource ./.;
 	    modules = ./gomod2nix.toml;
 	  };
+
+	  mock = buildGoApplication {
+            pname = "mock";
+	    version = "0.0.1";
+	    src = lib.cleanSource ./.;
+	    modules = ./gomod2nix.toml;
+	    subPackages = [ "src/mock" ];
+	  };
         in
         {
 	  packages = {
-            inherit generate;
+            inherit generate mock;
 	    default = generate;
 	  };
 

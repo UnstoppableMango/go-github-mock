@@ -18,8 +18,11 @@ go run main.go
 # Format code
 gofmt -w .
 
-# Nix build
+# Nix build (generator binary)
 nix build .#
+
+# Nix build (mock library package)
+nix build .#mock
 
 # Update gomod2nix.toml after go.mod changes
 gomod2nix generate
