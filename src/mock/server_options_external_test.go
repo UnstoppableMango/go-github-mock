@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-github/v73/github"
+	"github.com/google/go-github/v84/github"
 	"github.com/unstoppablemango/go-github-mock/src/mock"
 )
 
