@@ -16,6 +16,9 @@
 
 # Nix
 /result*
-.envrc
 .direnv
+
+# User specific
+.envrc
+.claude/*local*
 
