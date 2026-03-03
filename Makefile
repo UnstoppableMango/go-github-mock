@@ -1,4 +1,4 @@
-.PHONY: build generate
+.PHONY: build test generate gen format fmt
 
 build:
 	nix build .# .#mock
@@ -7,10 +7,10 @@ test:
 	go test ./...
 
 generate gen: gomod2nix.toml
-	go run main.go
+	nix run .#generate
 
 format fmt:
 	nix fmt
 
 gomod2nix.toml: go.mod go.sum flake.lock
-	gomod2nix generate
+	nix run .#gomod2nix -- generate
