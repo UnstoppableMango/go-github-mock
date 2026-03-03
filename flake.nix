@@ -25,49 +25,54 @@
       imports = [ inputs.treefmt-nix.flakeModule ];
 
       perSystem =
-        { inputs', pkgs, lib, ... }:
+        {
+          inputs',
+          pkgs,
+          lib,
+          ...
+        }:
         let
           inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication gomod2nix;
 
-	  generate = buildGoApplication {
+          generate = buildGoApplication {
             pname = "generate";
-	    version = "0.0.1";
-	    src = lib.cleanSource ./.;
-	    modules = ./gomod2nix.toml;
-	  };
+            version = "0.0.1";
+            src = lib.cleanSource ./.;
+            modules = ./gomod2nix.toml;
+          };
 
-	  mock = buildGoApplication {
+          mock = buildGoApplication {
             pname = "mock";
-	    version = "0.0.1";
-	    src = lib.cleanSource ./.;
-	    modules = ./gomod2nix.toml;
-	    subPackages = [ "src/mock" ];
-	  };
+            version = "0.0.1";
+            src = lib.cleanSource ./.;
+            modules = ./gomod2nix.toml;
+            subPackages = [ "src/mock" ];
+          };
         in
         {
-	  packages = {
+          packages = {
             inherit generate mock;
-	    default = generate;
-	  };
+            default = generate;
+          };
 
-	  apps = {
+          apps = {
             default = {
               type = "app";
-	      program = "${generate}/bin/generate";
-	    };
+              program = "${generate}/bin/generate";
+            };
 
-	    gomod2nix = {
+            gomod2nix = {
               type = "app";
-	      program = "${gomod2nix}/bin/gomod2nix";
-	    };
-	  };
+              program = "${gomod2nix}/bin/gomod2nix";
+            };
+          };
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               gnumake
               go
-	      golangci-lint
-	      gomod2nix
+              golangci-lint
+              gomod2nix
               nixfmt
             ];
           };
