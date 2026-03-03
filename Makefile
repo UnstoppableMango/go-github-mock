@@ -6,12 +6,11 @@ build:
 test:
 	go test ./...
 
-generate gen: gomod2nix.toml
+generate gen: gomod2nix.toml .github_openapi_version
 	nix run .
 
-update-openapi:
+.github_openapi_version:
 	gh release view --repo github/rest-api-description --json tagName --jq .tagName > .github_openapi_version
-	$(MAKE) generate
 
 format fmt:
 	nix fmt

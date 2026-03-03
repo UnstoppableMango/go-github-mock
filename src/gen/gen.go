@@ -34,13 +34,12 @@ var (
 )
 
 // ReadOpenAPIVersion reads the pinned OpenAPI spec version from GITHUB_OPENAPI_VERSION_FILE.
-func ReadOpenAPIVersion() string {
+func ReadOpenAPIVersion() (string, error) {
 	b, err := os.ReadFile(GITHUB_OPENAPI_VERSION_FILE)
 	if err != nil {
-		slog.Error("error reading openapi version file", "file", GITHUB_OPENAPI_VERSION_FILE, "err", err.Error())
-		os.Exit(1)
+		return "", fmt.Errorf("error reading %s: %w", GITHUB_OPENAPI_VERSION_FILE, err)
 	}
-	return strings.TrimSpace(string(b))
+	return strings.TrimSpace(string(b)), nil
 }
 
 // OpenAPIURLs returns the standard and enterprise OpenAPI spec URLs for the given version tag.

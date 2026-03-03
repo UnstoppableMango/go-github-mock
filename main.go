@@ -41,7 +41,11 @@ func fetchAndWriteAPIDefinition() {
 
 	u := make(uniq)
 
-	version := gen.ReadOpenAPIVersion()
+	version, err := gen.ReadOpenAPIVersion()
+	if err != nil {
+		slog.Error("Reading GitHub OpenAPI version file", "err", err)
+	}
+
 	standard, enterprise := gen.OpenAPIURLs(version)
 
 	defs := [][]byte{
