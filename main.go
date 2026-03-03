@@ -11,9 +11,9 @@ import (
 	"strings"
 
 	"github.com/buger/jsonparser"
-	"github.com/google/go-github/v73/github"
+	"github.com/google/go-github/v84/github"
 
-	"github.com/migueleliasweb/go-github-mock/src/gen"
+	"github.com/unstoppablemango/go-github-mock/src/gen"
 	"golang.org/x/mod/modfile"
 )
 
@@ -38,12 +38,27 @@ func (u uniq) has(s string) bool {
 
 func fetchAndWriteAPIDefinition() {
 	buf := bytes.NewBuffer([]byte(gen.OUTPUT_FILE_HEADER))
+	deprecatedBuf := bytes.NewBuffer([]byte(gen.DEPRECATED_OUTPUT_FILE_HEADER))
 
+	// Track seen variable names (post-mutation) to deduplicate across standard
+	// and enterprise specs.
 	u := make(uniq)
 
+	version, err := gen.ReadOpenAPIVersion()
+	if err != nil {
+		slog.Error("Reading GitHub OpenAPI version file", "err", err)
+		os.Exit(1)
+	}
+	if version == "" {
+		slog.Error("GitHub OpenAPI version is empty; aborting generation")
+		os.Exit(1)
+	}
+
+	standard, enterprise := gen.OpenAPIURLs(version)
+
 	defs := [][]byte{
-		gen.FetchAPIDefinition(gen.GITHUB_OPENAPI_DEFINITION_LOCATION),
-		gen.FetchAPIDefinition(gen.GITHUB_OPENAPI_ENTERPRISE_DEFINITION_LOCATION),
+		gen.FetchAPIDefinition(standard),
+		gen.FetchAPIDefinition(enterprise),
 	}
 
 	for _, d := range defs {
@@ -53,25 +68,34 @@ func fetchAndWriteAPIDefinition() {
 				endpointPattern := string(key)
 
 				httpMethods := []string{}
+				isDeprecated := []bool{}
 
 				jsonparser.ObjectEach(
 					endpointDefinition,
-					func(key, _ []byte, _ jsonparser.ValueType, _ int) error {
+					func(key, methodDef []byte, _ jsonparser.ValueType, _ int) error {
 						httpMethods = append(httpMethods, string(key))
+						deprecated, _ := jsonparser.GetBoolean(methodDef, "deprecated")
+						isDeprecated = append(isDeprecated, deprecated)
 
 						return nil
 					},
 				)
 
-				for _, httpMethod := range httpMethods {
-					code := gen.FormatToGolangVarNameAndValue(
-						gen.ScrapeResult{
-							HTTPMethod:      httpMethod,
-							EndpointPattern: endpointPattern,
-						},
-					)
-					if !u.has(code) {
-						buf.WriteString(code)
+				for i, httpMethod := range httpMethods {
+					sr := gen.ScrapeResult{
+						HTTPMethod:      httpMethod,
+						EndpointPattern: endpointPattern,
+					}
+
+					varName := gen.VarNameFromScrapeResult(sr)
+					if u.has(varName) {
+						continue
+					}
+
+					if isDeprecated[i] {
+						deprecatedBuf.WriteString(gen.FormatToGolangDeprecatedVarNameAndValue(sr))
+					} else {
+						buf.WriteString(gen.FormatToGolangVarNameAndValue(sr))
 					}
 				}
 
@@ -81,18 +105,23 @@ func fetchAndWriteAPIDefinition() {
 		)
 	}
 
-	os.WriteFile(
-		gen.OUTPUT_FILEPATH,
-		buf.Bytes(),
-		0755,
-	)
+	if err := os.WriteFile(gen.OUTPUT_FILEPATH, buf.Bytes(), 0644); err != nil {
+		slog.Error("error writing output file", "path", gen.OUTPUT_FILEPATH, "err", err)
+		os.Exit(1)
+	}
+	if err := os.WriteFile(gen.DEPRECATED_OUTPUT_FILEPATH, deprecatedBuf.Bytes(), 0644); err != nil {
+		slog.Error("error writing deprecated output file", "path", gen.DEPRECATED_OUTPUT_FILEPATH, "err", err)
+		os.Exit(1)
+	}
 
 	errorsFound := false
 
 	// to catch possible format errors
-	if err := exec.Command("gofmt", "-w", gen.OUTPUT_FILEPATH).Run(); err != nil {
-		slog.Error("error executing gofmt", "err", err.Error())
-		errorsFound = true
+	for _, path := range []string{gen.OUTPUT_FILEPATH, gen.DEPRECATED_OUTPUT_FILEPATH} {
+		if err := exec.Command("gofmt", "-w", path).Run(); err != nil {
+			slog.Error("error executing gofmt", "path", path, "err", err.Error())
+			errorsFound = true
+		}
 	}
 
 	// to catch everything else (hopefully)

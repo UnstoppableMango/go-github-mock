@@ -1,0 +1,30 @@
+schema = 3
+
+[mod]
+  [mod.'github.com/buger/jsonparser']
+    version = 'v1.1.1'
+    hash = 'sha256-T6dXT6Vzpm8gvQYi+c2LZkV+8ZOp0ZXBX7+e1mlliZE='
+
+  [mod.'github.com/google/go-github/v84']
+    version = 'v84.0.0'
+    hash = 'sha256-PCi2rQfQ4L2pmgGwOFSIW1u+exocIaq94K0OzuA++5I='
+
+  [mod.'github.com/google/go-querystring']
+    version = 'v1.2.0'
+    hash = 'sha256-F/Ve4oDaEqho8RryvdGSRR22/DbYHWZQa6M60n6oSYM='
+
+  [mod.'github.com/gorilla/mux']
+    version = 'v1.8.1'
+    hash = 'sha256-nDABvAhlYgxUW2N/brrep7NkQXoSGcHhA+XI4+tK0F0='
+
+  [mod.'golang.org/x/mod']
+    version = 'v0.33.0'
+    hash = 'sha256-NR+ZSeQKbfVP4Cu/SlNIivMa+c1OMyOSMxLSjX+LZJI='
+
+  [mod.'golang.org/x/text']
+    version = 'v0.34.0'
+    hash = 'sha256-wGKd1JkeiFROibvo2kkAuQ7JajSIfV4utGaoGbTQhQM='
+
+  [mod.'golang.org/x/time']
+    version = 'v0.14.0'
+    hash = 'sha256-fVjpq0ieUHVEOTSElDVleMWvfdcqojZchqdUXiC7NnY='

@@ -1,12 +1,31 @@
 # go-github-mock
-[![Go Reference](https://pkg.go.dev/badge/github.com/migueleliasweb/go-github-mock.svg)](https://pkg.go.dev/github.com/migueleliasweb/go-github-mock) [![Go Report Card](https://goreportcard.com/badge/github.com/migueleliasweb/go-github-mock)](https://goreportcard.com/report/github.com/migueleliasweb/go-github-mock)
 
-A library to aid unittesting code that uses Golang's Github SDK
+[![Go Reference](https://pkg.go.dev/badge/github.com/unstoppablemango/go-github-mock.svg)](https://pkg.go.dev/github.com/unstoppablemango/go-github-mock)
+[![Go Report Card](https://goreportcard.com/badge/github.com/unstoppablemango/go-github-mock)](https://goreportcard.com/report/github.com/unstoppablemango/go-github-mock)
+
+> **Note:** This is a fork of [migueleliasweb/go-github-mock](https://github.com/migueleliasweb/go-github-mock), originally created by [Miguel Elias](https://github.com/migueleliasweb).
+> All credit for the original design and implementation goes to them.
+
+To see what this fork changes relative to upstream:
+
+```bash
+git diff origin/main...$(git ls-remote https://github.com/migueleliasweb/go-github-mock HEAD | cut -f1)
+```
+
+Or by adding the upstream remote first:
+
+```bash
+git remote add upstream https://github.com/migueleliasweb/go-github-mock.git
+git fetch upstream
+git diff upstream/master...main
+```
+
+A library to aid unittesting code that uses Golang's GitHub SDK
 
 ## Installation
 
 ```bash
-go get github.com/migueleliasweb/go-github-mock
+go get github.com/unstoppablemango/go-github-mock
 ```
 
 ## Features
@@ -21,7 +40,7 @@ go get github.com/migueleliasweb/go-github-mock
 ## Examples
 
 ```go
-import "github.com/migueleliasweb/go-github-mock/src/mock"
+import "github.com/unstoppablemango/go-github-mock/src/mock"
 ```
 
 ### Multiple requests
@@ -43,14 +62,14 @@ mockedHTTPClient := mock.NewMockedHTTPClient(
         },
     ),
     mock.WithRequestMatchHandler(
-        mock.GetOrgsProjectsByOrg,
+        mock.GetOrgsReposByOrg,
         http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-            w.Write(mock.MustMarshal([]github.Project{
+            w.Write(mock.MustMarshal([]github.Repository{
                 {
-                    Name: github.Ptr("mocked-proj-1"),
+                    Name: github.Ptr("mocked-repo-1"),
                 },
                 {
-                    Name: github.Ptr("mocked-proj-2"),
+                    Name: github.Ptr("mocked-repo-2"),
                 },
             }))
         }),
@@ -72,14 +91,14 @@ orgs, _, orgsErr := c.Organizations.List(
 
 // orgs[0].Name == "foobar123thisorgwasmocked"
 
-projs, _, projsErr := c.Organizations.ListProjects(
+repos, _, reposErr := c.Repositories.ListByOrg(
     ctx,
     *orgs[0].Name,
-    &github.ProjectListOptions{},
+    nil,
 )
 
-// projs[0].Name == "mocked-proj-1"
-// projs[1].Name == "mocked-proj-2"
+// repos[0].Name == "mocked-repo-1"
+// repos[1].Name == "mocked-repo-2"
 
 ```
 
