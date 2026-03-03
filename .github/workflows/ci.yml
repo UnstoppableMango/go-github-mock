@@ -38,6 +38,8 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: nix run .
+
       - run: nix run .#gomod2nix -- generate
 
       - run: git diff --exit-code

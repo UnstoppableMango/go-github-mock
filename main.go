@@ -41,9 +41,12 @@ func fetchAndWriteAPIDefinition() {
 
 	u := make(uniq)
 
+	version := gen.ReadOpenAPIVersion()
+	standard, enterprise := gen.OpenAPIURLs(version)
+
 	defs := [][]byte{
-		gen.FetchAPIDefinition(gen.GITHUB_OPENAPI_DEFINITION_LOCATION),
-		gen.FetchAPIDefinition(gen.GITHUB_OPENAPI_ENTERPRISE_DEFINITION_LOCATION),
+		gen.FetchAPIDefinition(standard),
+		gen.FetchAPIDefinition(enterprise),
 	}
 
 	for _, d := range defs {

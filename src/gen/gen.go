@@ -13,9 +13,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-const GITHUB_OPENAPI_DEFINITION_LOCATION = "https://github.com/github/rest-api-description/blob/main/descriptions/api.github.com/api.github.com.json?raw=true"
-
-const GITHUB_OPENAPI_ENTERPRISE_DEFINITION_LOCATION = "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/ghec/ghec.json"
+const GITHUB_OPENAPI_VERSION_FILE = ".github_openapi_version"
 
 const OUTPUT_FILE_HEADER = `package mock
 
@@ -34,6 +32,24 @@ var (
 	// tokenRe matches valid Go identifier characters and path separators
 	tokenRe = regexp.MustCompile(`[a-zA-Z0-9\/\{\}\_]+`)
 )
+
+// ReadOpenAPIVersion reads the pinned OpenAPI spec version from GITHUB_OPENAPI_VERSION_FILE.
+func ReadOpenAPIVersion() string {
+	b, err := os.ReadFile(GITHUB_OPENAPI_VERSION_FILE)
+	if err != nil {
+		slog.Error("error reading openapi version file", "file", GITHUB_OPENAPI_VERSION_FILE, "err", err.Error())
+		os.Exit(1)
+	}
+	return strings.TrimSpace(string(b))
+}
+
+// OpenAPIURLs returns the standard and enterprise OpenAPI spec URLs for the given version tag.
+func OpenAPIURLs(version string) (standard, enterprise string) {
+	base := "https://raw.githubusercontent.com/github/rest-api-description/" + version
+	standard = base + "/descriptions/api.github.com/api.github.com.json"
+	enterprise = base + "/descriptions/ghec/ghec.json"
+	return
+}
 
 type ScrapeResult struct {
 	HTTPMethod      string
