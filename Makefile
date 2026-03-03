@@ -7,7 +7,7 @@ test:
 	go test ./...
 
 generate gen: gomod2nix.toml
-	nix run .#generate
+	nix run .
 
 format fmt:
 	nix fmt

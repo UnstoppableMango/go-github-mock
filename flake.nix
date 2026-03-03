@@ -58,7 +58,7 @@
           apps = {
             default = {
               type = "app";
-              program = "${generate}/bin/generate";
+              program = "${generate}/bin/go-github-mock";
             };
 
             gomod2nix = {
