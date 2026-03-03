@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+/go-github-mock
 
 # Test binary, built with `go test -c`
 *.test
@@ -21,4 +22,3 @@
 # User specific
 .envrc
 .claude/*local*
-

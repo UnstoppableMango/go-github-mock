@@ -38,7 +38,10 @@ func (u uniq) has(s string) bool {
 
 func fetchAndWriteAPIDefinition() {
 	buf := bytes.NewBuffer([]byte(gen.OUTPUT_FILE_HEADER))
+	deprecatedBuf := bytes.NewBuffer([]byte(gen.DEPRECATED_OUTPUT_FILE_HEADER))
 
+	// Track seen variable names (post-mutation) to deduplicate across standard
+	// and enterprise specs.
 	u := make(uniq)
 
 	version, err := gen.ReadOpenAPIVersion()
@@ -60,25 +63,34 @@ func fetchAndWriteAPIDefinition() {
 				endpointPattern := string(key)
 
 				httpMethods := []string{}
+				isDeprecated := []bool{}
 
 				jsonparser.ObjectEach(
 					endpointDefinition,
-					func(key, _ []byte, _ jsonparser.ValueType, _ int) error {
+					func(key, methodDef []byte, _ jsonparser.ValueType, _ int) error {
 						httpMethods = append(httpMethods, string(key))
+						deprecated, _ := jsonparser.GetBoolean(methodDef, "deprecated")
+						isDeprecated = append(isDeprecated, deprecated)
 
 						return nil
 					},
 				)
 
-				for _, httpMethod := range httpMethods {
-					code := gen.FormatToGolangVarNameAndValue(
-						gen.ScrapeResult{
-							HTTPMethod:      httpMethod,
-							EndpointPattern: endpointPattern,
-						},
-					)
-					if !u.has(code) {
-						buf.WriteString(code)
+				for i, httpMethod := range httpMethods {
+					sr := gen.ScrapeResult{
+						HTTPMethod:      httpMethod,
+						EndpointPattern: endpointPattern,
+					}
+
+					varName := gen.VarNameFromScrapeResult(sr)
+					if u.has(varName) {
+						continue
+					}
+
+					if isDeprecated[i] {
+						deprecatedBuf.WriteString(gen.FormatToGolangDeprecatedVarNameAndValue(sr))
+					} else {
+						buf.WriteString(gen.FormatToGolangVarNameAndValue(sr))
 					}
 				}
 
@@ -88,18 +100,17 @@ func fetchAndWriteAPIDefinition() {
 		)
 	}
 
-	os.WriteFile(
-		gen.OUTPUT_FILEPATH,
-		buf.Bytes(),
-		0755,
-	)
+	os.WriteFile(gen.OUTPUT_FILEPATH, buf.Bytes(), 0755)
+	os.WriteFile(gen.DEPRECATED_OUTPUT_FILEPATH, deprecatedBuf.Bytes(), 0755)
 
 	errorsFound := false
 
 	// to catch possible format errors
-	if err := exec.Command("gofmt", "-w", gen.OUTPUT_FILEPATH).Run(); err != nil {
-		slog.Error("error executing gofmt", "err", err.Error())
-		errorsFound = true
+	for _, path := range []string{gen.OUTPUT_FILEPATH, gen.DEPRECATED_OUTPUT_FILEPATH} {
+		if err := exec.Command("gofmt", "-w", path).Run(); err != nil {
+			slog.Error("error executing gofmt", "path", path, "err", err.Error())
+			errorsFound = true
+		}
 	}
 
 	// to catch everything else (hopefully)

@@ -22,6 +22,17 @@ const OUTPUT_FILE_HEADER = `package mock
 `
 const OUTPUT_FILEPATH = "src/mock/endpointpattern.go"
 
+const DEPRECATED_OUTPUT_FILEPATH = "src/mock/deprecated.go"
+
+const DEPRECATED_OUTPUT_FILE_HEADER = `package mock
+
+// Code generated; DO NOT EDIT.
+//
+// Deprecated endpoint aliases kept for backwards compatibility.
+// These endpoints are marked deprecated in GitHub's OpenAPI spec.
+
+`
+
 // Replacing deprecated method strings.Title
 // requires a "Caser"
 var Title = cases.Title(language.English)
@@ -158,4 +169,27 @@ func FormatToGolangVarNameAndValue(sr ScrapeResult) string {
 		sr.EndpointPattern,
 		strings.ToUpper(sr.HTTPMethod),
 	) + "\n"
+}
+
+func FormatToGolangDeprecatedVarNameAndValue(sr ScrapeResult) string {
+	sr = applyMutation(sr)
+
+	return fmt.Sprintf(
+		`// Deprecated: This endpoint is deprecated in GitHub's REST API.
+var %s EndpointPattern = EndpointPattern{
+	Pattern: "%s",
+	Method:  "%s",
+}
+`,
+		FormatToGolangVarName(sr),
+		sr.EndpointPattern,
+		strings.ToUpper(sr.HTTPMethod),
+	) + "\n"
+}
+
+// VarNameFromScrapeResult returns the Go variable name for a ScrapeResult,
+// applying any mutations first. Use this for deduplication before deciding
+// which output buffer to write to.
+func VarNameFromScrapeResult(sr ScrapeResult) string {
+	return FormatToGolangVarName(applyMutation(sr))
 }
