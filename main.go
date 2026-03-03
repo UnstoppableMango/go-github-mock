@@ -47,6 +47,11 @@ func fetchAndWriteAPIDefinition() {
 	version, err := gen.ReadOpenAPIVersion()
 	if err != nil {
 		slog.Error("Reading GitHub OpenAPI version file", "err", err)
+		os.Exit(1)
+	}
+	if version == "" {
+		slog.Error("GitHub OpenAPI version is empty; aborting generation")
+		os.Exit(1)
 	}
 
 	standard, enterprise := gen.OpenAPIURLs(version)
@@ -100,8 +105,14 @@ func fetchAndWriteAPIDefinition() {
 		)
 	}
 
-	os.WriteFile(gen.OUTPUT_FILEPATH, buf.Bytes(), 0755)
-	os.WriteFile(gen.DEPRECATED_OUTPUT_FILEPATH, deprecatedBuf.Bytes(), 0755)
+	if err := os.WriteFile(gen.OUTPUT_FILEPATH, buf.Bytes(), 0644); err != nil {
+		slog.Error("error writing output file", "path", gen.OUTPUT_FILEPATH, "err", err)
+		os.Exit(1)
+	}
+	if err := os.WriteFile(gen.DEPRECATED_OUTPUT_FILEPATH, deprecatedBuf.Bytes(), 0644); err != nil {
+		slog.Error("error writing deprecated output file", "path", gen.DEPRECATED_OUTPUT_FILEPATH, "err", err)
+		os.Exit(1)
+	}
 
 	errorsFound := false
 

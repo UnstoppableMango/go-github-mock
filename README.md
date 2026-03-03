@@ -20,7 +20,7 @@ git fetch upstream
 git diff upstream/master...main
 ```
 
-A library to aid unittesting code that uses Golang's Github SDK
+A library to aid unittesting code that uses Golang's GitHub SDK
 
 ## Installation
 

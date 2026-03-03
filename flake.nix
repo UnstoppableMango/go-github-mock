@@ -1,5 +1,5 @@
 {
-  description = "A library to aid unittesting code that uses Golang's Github SDK";
+  description = "A library to aid unittesting code that uses Golang's GitHub SDK";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
