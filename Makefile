@@ -11,11 +11,12 @@ tidy: go.sum gomod2nix.toml
 generate gen: gomod2nix.toml .github_openapi_version
 	nix run .
 
-.github_openapi_version:
-	gh release view --repo github/rest-api-description --json tagName --jq .tagName > .github_openapi_version
-
 format fmt:
 	nix fmt
+
+# Not a true dependency on go.sum, but a convenient trigger for re-checking the tag
+.github_openapi_version: go.sum
+	gh release view --repo github/rest-api-description --json tagName --jq .tagName > .github_openapi_version
 
 go.sum: go.mod $(shell find . -name *.go)
 	go mod tidy
