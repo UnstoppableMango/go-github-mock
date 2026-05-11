@@ -4,7 +4,6 @@ go 1.25.0
 
 require (
 	github.com/buger/jsonparser v1.2.0
-	github.com/google/go-github/v84 v84.0.0
 	github.com/google/go-github/v86 v86.0.0
 	github.com/gorilla/mux v1.8.1
 	golang.org/x/mod v0.36.0
