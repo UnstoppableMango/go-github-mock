@@ -1,18 +1,21 @@
-.PHONY: build generate gen format fmt test tidy
+.PHONY: build generate gen format fmt test tidy clean
 
 build:
-	nix build .# .#mock
+	nix build .# .#mock --no-link --no-substitute
 
 test:
 	go test ./...
 
-tidy: go.sum gomod2nix.toml
+tidy: go.sum nix/gomod2nix.toml
 
-generate gen: gomod2nix.toml .github_openapi_version
+generate gen: nix/gomod2nix.toml .github_openapi_version
 	nix run .
 
 format fmt:
 	nix fmt
+
+clean:
+	rm -f result*
 
 # Not a true dependency on go.sum, but a convenient trigger for re-checking the tag
 .github_openapi_version: go.sum
@@ -21,5 +24,5 @@ format fmt:
 go.sum: go.mod $(shell find . -name '*.go')
 	go mod tidy
 
-gomod2nix.toml: go.mod go.sum flake.lock
-	nix run .#gomod2nix -- generate
+nix/gomod2nix.toml: go.mod go.sum flake.lock
+	nix run .#gomod2nix -- --dir ${CURDIR} --outdir ${CURDIR}/nix generate

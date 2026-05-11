@@ -34,20 +34,9 @@
         let
           inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication gomod2nix;
 
-          generate = buildGoApplication {
-            pname = "generate";
-            version = "0.0.1";
-            src = lib.cleanSource ./.;
-            modules = ./gomod2nix.toml;
-          };
-
-          mock = buildGoApplication {
-            pname = "mock";
-            version = "0.0.1";
-            src = lib.cleanSource ./.;
-            modules = ./gomod2nix.toml;
-            subPackages = [ "src/mock" ];
-          };
+          version = "1.5.2";
+          generate = pkgs.callPackage ./nix/generate.nix { inherit buildGoApplication version; };
+          mock = pkgs.callPackage ./nix/mock.nix { inherit buildGoApplication version; };
         in
         {
           packages = {
