@@ -1,4 +1,4 @@
-.PHONY: build test generate gen update-openapi format fmt
+.PHONY: build generate gen format fmt test tidy
 
 build:
 	nix build .# .#mock
@@ -18,7 +18,7 @@ format fmt:
 .github_openapi_version: go.sum
 	gh release view --repo github/rest-api-description --json tagName --jq .tagName > .github_openapi_version
 
-go.sum: go.mod $(shell find . -name *.go)
+go.sum: go.mod $(shell find . -name '*.go')
 	go mod tidy
 
 gomod2nix.toml: go.mod go.sum flake.lock
