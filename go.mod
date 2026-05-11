@@ -8,7 +8,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	golang.org/x/mod v0.33.0
 	golang.org/x/text v0.34.0
-	golang.org/x/time v0.14.0
+	golang.org/x/time v0.15.0
 )
 
 require github.com/google/go-querystring v1.2.0 // indirect
