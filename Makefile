@@ -1,4 +1,4 @@
-.PHONY: build generate gen format fmt test tidy
+.PHONY: build generate gen format fmt test tidy clean
 
 build:
 	nix build .# .#mock --no-link --no-substitute
