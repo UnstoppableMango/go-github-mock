@@ -2,8 +2,8 @@ schema = 3
 
 [mod]
   [mod.'github.com/buger/jsonparser']
-    version = 'v1.1.1'
-    hash = 'sha256-T6dXT6Vzpm8gvQYi+c2LZkV+8ZOp0ZXBX7+e1mlliZE='
+    version = 'v1.2.0'
+    hash = 'sha256-CiwV8UFYw2PnnyUoRojiVLq+MlKJ/aviufLcRi1GLbw='
 
   [mod.'github.com/google/go-github/v86']
     version = 'v86.0.0'
@@ -18,13 +18,13 @@ schema = 3
     hash = 'sha256-nDABvAhlYgxUW2N/brrep7NkQXoSGcHhA+XI4+tK0F0='
 
   [mod.'golang.org/x/mod']
-    version = 'v0.33.0'
-    hash = 'sha256-NR+ZSeQKbfVP4Cu/SlNIivMa+c1OMyOSMxLSjX+LZJI='
+    version = 'v0.36.0'
+    hash = 'sha256-ZhyOvy9ptbV+pna/CNyQFr5cKRn5O+B2QzkQAISKgco='
 
   [mod.'golang.org/x/text']
     version = 'v0.34.0'
     hash = 'sha256-wGKd1JkeiFROibvo2kkAuQ7JajSIfV4utGaoGbTQhQM='
 
   [mod.'golang.org/x/time']
-    version = 'v0.14.0'
-    hash = 'sha256-fVjpq0ieUHVEOTSElDVleMWvfdcqojZchqdUXiC7NnY='
+    version = 'v0.15.0'
+    hash = 'sha256-5D24A65wn7k93Jj3+918UKjB9ccmGHPBEqjD2XDB92E='
