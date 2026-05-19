@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/buger/jsonparser"
-	"github.com/google/go-github/v86/github"
+	"github.com/google/go-github/v87/github"
 
 	"github.com/unstoppablemango/go-github-mock/src/gen"
 	"golang.org/x/mod/modfile"
@@ -136,7 +136,16 @@ func fetchAndWriteAPIDefinition() {
 }
 
 func updateGoGithubDep() {
-	ghClient := github.NewClient(nil)
+	ghClient, err := github.NewClient()
+
+	if err != nil {
+		slog.Error(
+			"creating google/go-github client",
+			"err", err.Error(),
+		)
+
+		os.Exit(1)
+	}
 
 	releaseInfo, _, err := ghClient.Repositories.GetLatestRelease(
 		context.Background(),

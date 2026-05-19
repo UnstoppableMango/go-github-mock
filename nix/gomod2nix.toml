@@ -5,9 +5,9 @@ schema = 3
     version = 'v1.2.0'
     hash = 'sha256-CiwV8UFYw2PnnyUoRojiVLq+MlKJ/aviufLcRi1GLbw='
 
-  [mod.'github.com/google/go-github/v86']
-    version = 'v86.0.0'
-    hash = 'sha256-JdNNRt9Jl/s+ysORXOT2jjIJXHXhkPl+adNZf8g3nMQ='
+  [mod.'github.com/google/go-github/v87']
+    version = 'v87.0.0'
+    hash = 'sha256-zi90MiU1JilBh8dMjcNE4BvhwrMLpmcISTRaL6LNqfs='
 
   [mod.'github.com/google/go-querystring']
     version = 'v1.2.0'

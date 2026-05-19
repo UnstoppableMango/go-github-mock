@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/google/go-github/v86/github"
+	"github.com/google/go-github/v87/github"
 )
 
 func TestRepoGetContents(t *testing.T) {
@@ -40,7 +40,16 @@ func TestRepoGetContents(t *testing.T) {
 					),
 				)
 
-				c := github.NewClient(mockedHTTPClient)
+				c, err := github.NewClient(
+					github.WithHTTPClient(mockedHTTPClient),
+				)
+
+				if err != nil {
+					t.Errorf(
+						"err is %s, want nil",
+						err.Error(),
+					)
+				}
 
 				ctx := context.Background()
 
@@ -103,7 +112,16 @@ func TestRepoGetContentsForDirectory(t *testing.T) {
 					),
 				)
 
-				client := github.NewClient(mockedHTTPClient)
+				client, err := github.NewClient(
+					github.WithHTTPClient(mockedHTTPClient),
+				)
+
+				if err != nil {
+					t.Errorf(
+						"err is %s, want nil",
+						err.Error(),
+					)
+				}
 
 				ctx := context.Background()
 
@@ -155,7 +173,16 @@ func TestPatchGitReference(t *testing.T) {
 		),
 	)
 
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+
+	if err != nil {
+		t.Errorf(
+			"err is %s, want nil",
+			err.Error(),
+		)
+	}
 
 	ctx := context.Background()
 
@@ -189,7 +216,16 @@ func TestGetGitReference(t *testing.T) {
 		),
 	)
 
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+
+	if err != nil {
+		t.Errorf(
+			"err is %s, want nil",
+			err.Error(),
+		)
+	}
 
 	ctx := context.Background()
 
@@ -217,7 +253,16 @@ func TestRepositoriesGetCommitSHA1WithForwardSlash(t *testing.T) {
 		),
 	)
 
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+
+	if err != nil {
+		t.Errorf(
+			"err is %s, want nil",
+			err.Error(),
+		)
+	}
 
 	ctx := context.Background()
 
