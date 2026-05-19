@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-github/v86/github"
+	"github.com/google/go-github/v87/github"
 	"github.com/unstoppablemango/go-github-mock/src/mock"
 )
 
@@ -31,7 +31,13 @@ func TestWithRateLimit(t *testing.T) {
 		mock.WithRateLimit(10, 1),
 	)
 
-	ghc := github.NewClient(mhc)
+	ghc, err := github.NewClient(
+		github.WithHTTPClient(mhc),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
 	opts := &github.RepositoryListByOrgOptions{}
 	repoNames := []string{}
 	rleCount := 0

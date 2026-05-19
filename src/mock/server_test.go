@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/go-github/v86/github"
+	"github.com/google/go-github/v87/github"
 )
 
 func TestNewMockedHTTPClient(t *testing.T) {
@@ -27,7 +27,12 @@ func TestNewMockedHTTPClient(t *testing.T) {
 			},
 		),
 	)
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
@@ -73,7 +78,12 @@ func TestMockErrorSimple(t *testing.T) {
 			}),
 		),
 	)
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
@@ -112,7 +122,12 @@ func TestMockErrorToError(t *testing.T) {
 			}),
 		),
 	)
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
@@ -153,7 +168,12 @@ func TestMocksNotConfiguredError(t *testing.T) {
 			},
 		),
 	)
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
@@ -207,7 +227,12 @@ func TestMocksPaginationAllPages(t *testing.T) {
 		),
 	)
 
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
@@ -265,7 +290,12 @@ func TestEmptyArrayResult(t *testing.T) {
 		),
 	)
 
-	c := github.NewClient(mockedHTTPClient)
+	c, err := github.NewClient(
+		github.WithHTTPClient(mockedHTTPClient),
+	)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	ctx := context.Background()
 
