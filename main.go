@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"flag"
 	"io/fs"
 	"log/slog"
 	"os"
@@ -18,8 +19,13 @@ import (
 )
 
 func main() {
+	skipUpgrade := flag.Bool("skip-upgrade", false, "regenerate endpoint patterns without upgrading the go-github dependency")
+	flag.Parse()
+
 	fetchAndWriteAPIDefinition()
-	updateGoGithubDep()
+	if !*skipUpgrade {
+		updateGoGithubDep()
+	}
 }
 
 // type helper just to ensure uniqueness of the generated output

@@ -43,8 +43,10 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: nix run .
+      # Upgrading go-github is Renovate's job; here we only check that the
+      # committed generated code matches the pinned dependencies.
+      - run: nix run . -- --skip-upgrade
 
-      - run: nix run .#gomod2nix -- generate
+      - run: nix run .#gomod2nix -- --outdir nix generate
 
       - run: git diff --exit-code
